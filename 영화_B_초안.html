@@ -1,287 +1,337 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>나의 영화 티어리스트</title>
-<style>
-  /* ===== 기본 스타일 ===== */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: "Segoe UI", "Malgun Gothic", sans-serif;
-    background: #1e1e2e;
-    color: #eee;
-    padding: 20px;
-    line-height: 1.4;
-  }
-  h1 { text-align: center; margin-bottom: 16px; font-size: 1.6rem; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 영화 티어리스트</title>
+    <style>
+        /* 기본 스타일 초기화 및 설정 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
 
-  /* ===== 입력 영역 ===== */
-  .controls {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-  .controls input {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    width: 240px;
-    max-width: 60vw;
-  }
-  .controls button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    background: #4caf50;
-    color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  .controls button.reset { background: #e57373; }
-  .controls button:hover { opacity: 0.9; }
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-  /* ===== 티어 행 ===== */
-  .tier-row {
-    display: flex;
-    align-items: stretch;
-    margin-bottom: 6px;
-    border-radius: 6px;
-    overflow: hidden;
-    min-height: 70px;
-  }
-  .tier-label {
-    width: 60px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #1e1e2e;
-  }
-  /* 티어별 색상 */
-  .tier-S .tier-label { background: #ff6b6b; }
-  .tier-A .tier-label { background: #ffa94d; }
-  .tier-B .tier-label { background: #ffd43b; }
-  .tier-C .tier-label { background: #69db7c; }
-  .tier-D .tier-label { background: #4dabf7; }
-  .tier-F .tier-label { background: #adb5bd; }
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
 
-  .drop-zone {
-    flex: 1;
-    background: #2a2a3c;
-    padding: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-content: flex-start;
-  }
-  .drop-zone.drag-over { background: #3a3a50; outline: 2px dashed #888; }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
 
-  /* ===== 보관함 ===== */
-  .pool-wrap { margin-top: 20px; }
-  .pool-wrap h2 { font-size: 1.1rem; margin-bottom: 8px; }
-  .pool {
-    background: #2a2a3c;
-    border: 1px dashed #555;
-    border-radius: 6px;
-    padding: 10px;
-    min-height: 70px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-content: flex-start;
-  }
-  .pool.drag-over { background: #3a3a50; outline: 2px dashed #888; }
+        /* 입력창 영역 */
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
 
-  /* ===== 영화 카드 ===== */
-  .card {
-    background: #51516e;
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: grab;
-    user-select: none;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.95rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  }
-  .card:active { cursor: grabbing; }
-  .card.dragging { opacity: 0.4; }
-  .card .del {
-    cursor: pointer;
-    color: #ffb3b3;
-    font-weight: bold;
-    padding: 0 2px;
-  }
-  .card .del:hover { color: #ff5252; }
+        #movie-input {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            width: 300px;
+            outline: none;
+        }
 
-  .empty-hint { color: #888; font-size: 0.85rem; align-self: center; }
-</style>
+        #add-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #add-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* 티어리스트 영역 */
+        .tier-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background-color: #000000;
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .tier-row {
+            display: flex;
+            min-height: 80px;
+            background-color: #2a2a2a;
+            border-bottom: 1px solid #111;
+        }
+
+        .tier-row:last-child {
+            border-bottom: none;
+        }
+
+        .tier-label {
+            width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            flex-shrink: 0;
+        }
+
+        /* 기획서에 맞춘 티어 색상 */
+        .tier-s { background-color: #ff7f7f; } /* 빨강 */
+        .tier-a { background-color: #ffbf7f; } /* 주황 */
+        .tier-b { background-color: #ffff7f; } /* 노랑 */
+        .tier-c { background-color: #7fff7f; } /* 초록 */
+        .tier-d { background-color: #7fbfff; } /* 파랑 */
+        .tier-f { background-color: #bfbfbf; } /* 회색 */
+
+        /* 드롭 존 (영화 카드가 놓이는 곳) */
+        .tier-zone {
+            flex-grow: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .tier-zone.drag-over {
+            background-color: #3a3a3a;
+        }
+
+        /* 보관함 영역 */
+        .pool-area {
+            background-color: #2a2a2a;
+            border: 2px dashed #555;
+            border-radius: 8px;
+            min-height: 120px;
+            padding: 15px;
+        }
+
+        .pool-area h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #aaa;
+        }
+
+        /* 영화 카드 */
+        .movie-card {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            height: fit-content;
+        }
+
+        .movie-card:active {
+            cursor: grabbing;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff4444;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+        
+        .delete-btn:hover {
+            color: #cc0000;
+        }
+    </style>
 </head>
 <body>
 
-  <h1>🎬 나의 영화 티어리스트</h1>
+    <div class="container">
+        <h1>🎬 나의 영화 티어리스트</h1>
+        
+        <!-- 영화 추가 영역 -->
+        <div class="input-area">
+            <input type="text" id="movie-input" placeholder="영화 제목을 입력하세요">
+            <button id="add-btn">추가</button>
+        </div>
 
-  <!-- 입력 영역 -->
-  <div class="controls">
-    <input type="text" id="movieInput" placeholder="영화 제목 입력 후 Enter 또는 추가" />
-    <button id="addBtn">추가</button>
-    <button id="resetBtn" class="reset">전체 초기화</button>
-  </div>
+        <!-- 티어리스트 영역 -->
+        <div class="tier-list">
+            <div class="tier-row">
+                <div class="tier-label tier-s">S</div>
+                <div class="tier-zone" data-tier="S"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label tier-a">A</div>
+                <div class="tier-zone" data-tier="A"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label tier-b">B</div>
+                <div class="tier-zone" data-tier="B"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label tier-c">C</div>
+                <div class="tier-zone" data-tier="C"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label tier-d">D</div>
+                <div class="tier-zone" data-tier="D"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label tier-f">F</div>
+                <div class="tier-zone" data-tier="F"></div>
+            </div>
+        </div>
 
-  <!-- 티어 영역 (JS가 채움) -->
-  <div id="tierContainer"></div>
+        <!-- 미분류 보관함 -->
+        <div class="pool-area">
+            <h2>보관함 (미분류)</h2>
+            <div class="tier-zone" data-tier="pool" style="min-height: 80px;"></div>
+        </div>
+    </div>
 
-  <!-- 보관함 -->
-  <div class="pool-wrap">
-    <h2>📦 보관함 (미분류)</h2>
-    <div class="pool drop-zone" data-tier="pool" id="pool"></div>
-  </div>
+    <script>
+        // 1. 데이터 상태 관리
+        // localStorage에서 데이터를 불러오거나, 없으면 빈 배열로 초기화합니다.
+        let movies = JSON.parse(localStorage.getItem('movieTierList')) || [];
 
-<script>
-  // ===== 설정 =====
-  const TIERS = ["S", "A", "B", "C", "D", "F"];  // 6단계
-  const STORAGE_KEY = "movieTierlistData";
+        // DOM 요소 선택
+        const movieInput = document.getElementById('movie-input');
+        const addBtn = document.getElementById('add-btn');
+        const tierZones = document.querySelectorAll('.tier-zone');
 
-  // ===== 상태 =====
-  // movies = [{ id, title, tier }]  tier 값: "S"~"F" 또는 "pool"
-  let movies = [];
-
-  // ===== 저장 / 불러오기 =====
-  function save() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(movies));
-  }
-  function load() {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    movies = raw ? JSON.parse(raw) : [];
-  }
-
-  // ===== 화면 그리기 =====
-  function render() {
-    // 티어 행 그리기
-    const container = document.getElementById("tierContainer");
-    container.innerHTML = "";
-    TIERS.forEach(tier => {
-      const row = document.createElement("div");
-      row.className = "tier-row tier-" + tier;
-      row.innerHTML = `
-        <div class="tier-label">${tier}</div>
-        <div class="drop-zone" data-tier="${tier}"></div>
-      `;
-      container.appendChild(row);
-    });
-
-    // 모든 드롭존 비우기
-    document.querySelectorAll(".drop-zone").forEach(z => z.innerHTML = "");
-
-    // 각 영화 카드를 알맞은 드롭존에 배치
-    movies.forEach(m => {
-      const zone = document.querySelector(`.drop-zone[data-tier="${m.tier}"]`);
-      if (zone) zone.appendChild(createCard(m));
-    });
-
-    attachDropEvents();
-    save();
-  }
-
-  // ===== 카드 생성 =====
-  function createCard(movie) {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.draggable = true;
-    card.dataset.id = movie.id;
-
-    const title = document.createElement("span");
-    title.textContent = movie.title;
-
-    const del = document.createElement("span");
-    del.className = "del";
-    del.textContent = "×";
-    del.title = "삭제";
-    del.addEventListener("click", (e) => {
-      e.stopPropagation();
-      movies = movies.filter(m => m.id !== movie.id);
-      render();
-    });
-
-    card.appendChild(title);
-    card.appendChild(del);
-
-    // 드래그 시작/끝
-    card.addEventListener("dragstart", () => {
-      card.classList.add("dragging");
-      window._draggingId = movie.id;
-    });
-    card.addEventListener("dragend", () => {
-      card.classList.remove("dragging");
-      window._draggingId = null;
-    });
-
-    return card;
-  }
-
-  // ===== 드롭존 이벤트 연결 =====
-  function attachDropEvents() {
-    document.querySelectorAll(".drop-zone").forEach(zone => {
-      zone.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        zone.classList.add("drag-over");
-      });
-      zone.addEventListener("dragleave", () => {
-        zone.classList.remove("drag-over");
-      });
-      zone.addEventListener("drop", (e) => {
-        e.preventDefault();
-        zone.classList.remove("drag-over");
-        const id = window._draggingId;
-        const target = zone.dataset.tier;
-        const movie = movies.find(m => m.id === id);
-        if (movie) {
-          movie.tier = target;
-          render();
+        // 2. 데이터 저장 함수
+        function saveMovies() {
+            localStorage.setItem('movieTierList', JSON.stringify(movies));
         }
-      });
-    });
-  }
 
-  // ===== 영화 추가 =====
-  function addMovie() {
-    const input = document.getElementById("movieInput");
-    const title = input.value.trim();
-    if (!title) return;
-    movies.push({
-      id: Date.now().toString() + Math.random().toString(16).slice(2),
-      title: title,
-      tier: "pool"   // 처음엔 보관함으로
-    });
-    input.value = "";
-    input.focus();
-    render();
-  }
+        // 3. 화면 렌더링 함수
+        function renderMovies() {
+            // 모든 구역 비우기
+            tierZones.forEach(zone => zone.innerHTML = '');
 
-  // ===== 이벤트 바인딩 =====
-  document.getElementById("addBtn").addEventListener("click", addMovie);
-  document.getElementById("movieInput").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") addMovie();
-  });
-  document.getElementById("resetBtn").addEventListener("click", () => {
-    if (confirm("정말 전체 초기화할까요? 모든 영화가 삭제됩니다.")) {
-      movies = [];
-      render();
-    }
-  });
+            // 영화 데이터를 순회하며 카드 생성
+            movies.forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.draggable = true; // 드래그 가능하도록 설정
+                card.dataset.id = movie.id;
 
-  // ===== 시작 =====
-  load();
-  render();
-</script>
+                // 카드 내용 (제목 + 삭제 버튼)
+                card.innerHTML = `
+                    <span>${movie.title}</span>
+                    <button class="delete-btn" onclick="deleteMovie(${movie.id})">×</button>
+                `;
 
+                // 드래그 시작 이벤트
+                card.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', movie.id);
+                    setTimeout(() => card.style.opacity = '0.5', 0);
+                });
+
+                // 드래그 종료 이벤트
+                card.addEventListener('dragend', () => {
+                    card.style.opacity = '1';
+                });
+
+                // 알맞은 티어 구역에 카드 추가
+                const targetZone = document.querySelector(`.tier-zone[data-tier="${movie.tier}"]`);
+                if (targetZone) {
+                    targetZone.appendChild(card);
+                }
+            });
+        }
+
+        // 4. 영화 추가 기능
+        function addMovie() {
+            const title = movieInput.value.trim();
+            if (!title) return; // 빈 칸이면 무시
+
+            const newMovie = {
+                id: Date.now(), // 고유 ID로 현재 시간 사용
+                title: title,
+                tier: 'pool' // 기본값은 보관함
+            };
+
+            movies.push(newMovie);
+            saveMovies();
+            renderMovies();
+            movieInput.value = ''; // 입력창 초기화
+        }
+
+        // 5. 영화 삭제 기능
+        window.deleteMovie = function(id) {
+            movies = movies.filter(movie => movie.id !== id);
+            saveMovies();
+            renderMovies();
+        };
+
+        // 6. 드래그 앤 드롭 이벤트 설정
+        tierZones.forEach(zone => {
+            // 드래그 요소가 구역 위에 있을 때
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault(); // 기본 동작을 막아야 drop 이벤트가 발생함
+                zone.classList.add('drag-over');
+            });
+
+            // 드래그 요소가 구역을 벗어날 때
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('drag-over');
+            });
+
+            // 요소를 구역에 떨어뜨렸을 때
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('drag-over');
+
+                const id = parseInt(e.dataTransfer.getData('text/plain'));
+                const newTier = zone.dataset.tier;
+
+                // 데이터 업데이트
+                const movieIndex = movies.findIndex(m => m.id === id);
+                if (movieIndex !== -1) {
+                    movies[movieIndex].tier = newTier;
+                    saveMovies();
+                    renderMovies();
+                }
+            });
+        });
+
+        // 이벤트 리스너 등록
+        addBtn.addEventListener('click', addMovie);
+        movieInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addMovie();
+        });
+
+        // 초기 렌더링 실행
+        renderMovies();
+    </script>
 </body>
 </html>
