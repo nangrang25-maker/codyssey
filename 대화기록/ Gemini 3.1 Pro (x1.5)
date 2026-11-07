@@ -1,0 +1,441 @@
+이 기획서대로 html, css, javascript 가 포함된 파일을 만들고 .html 로 제공합니다. 
+
+# 영화 티어리스트 기획서 (최종 확정본)
+
+## 1. 프로젝트 개요
+- **목적**: 사용자가 영화를 티어에 배치해 선호도를 시각적으로 정리하는 로컬 웹 도구
+- **핵심 경험**: 드래그 앤 드롭으로 직관적인 순위 매기기
+- **설계 철학**: 외부 의존성 없이, 파일 하나로 가볍게 동작
+
+## 2. 설계 원칙 (확정)
+- 단일 HTML 파일로 완결 (index.html 하나)
+- 외부 라이브러리·프레임워크 0개 (순수 웹 기술만)
+- 서버·인터넷 연결 불필요
+- 데이터는 브라우저 localStorage에 로컬 저장
+
+## 3. 기술 스택 (확정)
+| 구분 | 선택 |
+|------|------|
+| 구조 | HTML5 |
+| 스타일 | 순수 CSS (파일 내 <style>) |
+| 기능 | 순수 JavaScript (파일 내 <script>) |
+| 드래그 | HTML5 Drag and Drop API |
+| 저장 | localStorage |
+
+## 4. 티어 구성 (확정: 6단계)
+| 등급 | 추천 색상 |
+|------|-----------|
+| S | 빨강 계열 |
+| A | 주황 계열 |
+| B | 노랑 계열 |
+| C | 초록 계열 |
+| D | 파랑 계열 |
+| F | 회색 계열 |
+※ 색상은 개발 단계에서 조정 가능
+
+## 5. 영화 카드 (확정: 텍스트 카드)
+- 이미지 없이 '제목 텍스트'만 표시하는 카드 방식
+- 가장 가볍고 구현이 단순함
+
+## 6. 핵심 기능
+### 필수 기능 (MVP)
+- [ ] 6단계 티어 영역(S~F) 표시
+- [ ] 미분류 보관함 (아직 배치 안 한 영화 모음)
+- [ ] 텍스트 카드 형태의 영화 항목 표시
+- [ ] 드래그 앤 드롭으로 티어 간 이동
+- [ ] 영화 추가 (제목 입력)
+- [ ] 영화 삭제
+- [ ] localStorage 자동 저장 / 불러오기
+
+### 선택 기능 (추후 확장)
+- [ ] 티어 이름·색상 커스터마이징
+- [ ] 결과 이미지로 내보내기
+- [ ] 전체 초기화 버튼
+
+## 7. 화면 구성
+┌─────────────────────────────┐
+│ 🎬 나의 영화 티어리스트          │
+│ [영화 제목 입력___] [추가]       │
+├─────────────────────────────┤
+│ S │ [영화][영화]               │
+│ A │ [영화]                     │
+│ B │                           │
+│ C │ [영화][영화]               │
+│ D │                           │
+│ F │ [영화]                     │
+├─────────────────────────────┤
+│ 보관함: [영화][영화][영화]       │
+└─────────────────────────────┘
+
+## 8. 데이터 구조
+- 영화 항목: { id, 제목, 현재티어 }
+- 티어 목록: ["S", "A", "B", "C", "D", "F"]
+- 저장 위치: localStorage (JSON 형태)
+
+## 9. 파일 구조
+└── index.html   (HTML + CSS + JS 전부 포함)
+
+## 10. 제작 단계 (로드맵)
+1. HTML 레이아웃(티어 영역 + 보관함 + 입력창) 구성
+2. CSS로 티어·카드 스타일링
+3. 영화 추가/삭제 기능 구현
+4. 드래그 앤 드롭 기능 구현
+5. localStorage 저장/불러오기 연동
+6. 테스트 및 디자인 다듬기
+AI
+기획서에 맞춰 모든 기능이 포함된 단일 HTML 파일을 작성했습니다.
+
+이 코드는 외부 라이브러리나 인터넷 연결 없이 브라우저에서 바로 실행되며, localStorage를 사용하여 새로고침해도 데이터가 유지됩니다.
+
+아래 코드를 복사하여 index.html이라는 이름으로 저장한 뒤, 웹 브라우저(크롬, 엣지 등)로 열면 바로 사용할 수 있습니다.
+
+🎬 영화 티어리스트 (index.html)
+html
+📋 복사
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 영화 티어리스트</title>
+    <style>
+        /* 기본 스타일 초기화 및 설정 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        /* 입력창 영역 */
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        #movie-input {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            width: 300px;
+            outline: none;
+        }
+
+        #add-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #add-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* 티어리스트 영역 */
+        .tier-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background-color: #000000;
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .tier-row {
+            display: flex;
+            min-height: 80px;
+            background-color: #2a2a2a;
+            border-bottom: 1px solid #111;
+        }
+
+        .tier-row:last-child {
+            border-bottom: none;
+        }
+
+        .tier-label {
+            width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            flex-shrink: 0;
+        }
+
+        /* 기획서에 맞춘 티어 색상 */
+        .tier-s { background-color: #ff7f7f; } /* 빨강 */
+        .tier-a { background-color: #ffbf7f; } /* 주황 */
+        .tier-b { background-color: #ffff7f; } /* 노랑 */
+        .tier-c { background-color: #7fff7f; } /* 초록 */
+        .tier-d { background-color: #7fbfff; } /* 파랑 */
+        .tier-f { background-color: #bfbfbf; } /* 회색 */
+
+        /* 드롭 존 (영화 카드가 놓이는 곳) */
+        .tier-zone {
+            flex-grow: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .tier-zone.drag-over {
+            background-color: #3a3a3a;
+        }
+
+        /* 보관함 영역 */
+        .pool-area {
+            background-color: #2a2a2a;
+            border: 2px dashed #555;
+            border-radius: 8px;
+            min-height: 120px;
+            padding: 15px;
+        }
+
+        .pool-area h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #aaa;
+        }
+
+        /* 영화 카드 */
+        .movie-card {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            height: fit-content;
+        }
+
+        .movie-card:active {
+            cursor: grabbing;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff4444;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+        
+        .delete-btn:hover {
+            color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🎬 나의 영화 티어리스트</h1>
+        
+        <!-- 영화 추가 영역 -->
+        <div class="input-area">
+            <input type="text" id="movie-input" placeholder="영화 제목을 입력하세요">
+            <button id="add-btn">추가</button>
+        </div>
+
+        <!-- 티어리스트 영역 -->
+        <div class="tier-list">
+            <div class="tier-row">
+                <div class="tier-label tier-s">S</div>
+                <div class="tier-zone" data-tier="S"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label tier-a">A</div>
+                <div class="tier-zone" data-tier="A"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label tier-b">B</div>
+                <div class="tier-zone" data-tier="B"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label tier-c">C</div>
+                <div class="tier-zone" data-tier="C"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label tier-d">D</div>
+                <div class="tier-zone" data-tier="D"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label tier-f">F</div>
+                <div class="tier-zone" data-tier="F"></div>
+            </div>
+        </div>
+
+        <!-- 미분류 보관함 -->
+        <div class="pool-area">
+            <h2>보관함 (미분류)</h2>
+            <div class="tier-zone" data-tier="pool" style="min-height: 80px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // 1. 데이터 상태 관리
+        // localStorage에서 데이터를 불러오거나, 없으면 빈 배열로 초기화합니다.
+        let movies = JSON.parse(localStorage.getItem('movieTierList')) || [];
+
+        // DOM 요소 선택
+        const movieInput = document.getElementById('movie-input');
+        const addBtn = document.getElementById('add-btn');
+        const tierZones = document.querySelectorAll('.tier-zone');
+
+        // 2. 데이터 저장 함수
+        function saveMovies() {
+            localStorage.setItem('movieTierList', JSON.stringify(movies));
+        }
+
+        // 3. 화면 렌더링 함수
+        function renderMovies() {
+            // 모든 구역 비우기
+            tierZones.forEach(zone => zone.innerHTML = '');
+
+            // 영화 데이터를 순회하며 카드 생성
+            movies.forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.draggable = true; // 드래그 가능하도록 설정
+                card.dataset.id = movie.id;
+
+                // 카드 내용 (제목 + 삭제 버튼)
+                card.innerHTML = `
+                    <span>${movie.title}</span>
+                    <button class="delete-btn" onclick="deleteMovie(${movie.id})">×</button>
+                `;
+
+                // 드래그 시작 이벤트
+                card.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', movie.id);
+                    setTimeout(() => card.style.opacity = '0.5', 0);
+                });
+
+                // 드래그 종료 이벤트
+                card.addEventListener('dragend', () => {
+                    card.style.opacity = '1';
+                });
+
+                // 알맞은 티어 구역에 카드 추가
+                const targetZone = document.querySelector(`.tier-zone[data-tier="${movie.tier}"]`);
+                if (targetZone) {
+                    targetZone.appendChild(card);
+                }
+            });
+        }
+
+        // 4. 영화 추가 기능
+        function addMovie() {
+            const title = movieInput.value.trim();
+            if (!title) return; // 빈 칸이면 무시
+
+            const newMovie = {
+                id: Date.now(), // 고유 ID로 현재 시간 사용
+                title: title,
+                tier: 'pool' // 기본값은 보관함
+            };
+
+            movies.push(newMovie);
+            saveMovies();
+            renderMovies();
+            movieInput.value = ''; // 입력창 초기화
+        }
+
+        // 5. 영화 삭제 기능
+        window.deleteMovie = function(id) {
+            movies = movies.filter(movie => movie.id !== id);
+            saveMovies();
+            renderMovies();
+        };
+
+        // 6. 드래그 앤 드롭 이벤트 설정
+        tierZones.forEach(zone => {
+            // 드래그 요소가 구역 위에 있을 때
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault(); // 기본 동작을 막아야 drop 이벤트가 발생함
+                zone.classList.add('drag-over');
+            });
+
+            // 드래그 요소가 구역을 벗어날 때
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('drag-over');
+            });
+
+            // 요소를 구역에 떨어뜨렸을 때
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('drag-over');
+
+                const id = parseInt(e.dataTransfer.getData('text/plain'));
+                const newTier = zone.dataset.tier;
+
+                // 데이터 업데이트
+                const movieIndex = movies.findIndex(m => m.id === id);
+                if (movieIndex !== -1) {
+                    movies[movieIndex].tier = newTier;
+                    saveMovies();
+                    renderMovies();
+                }
+            });
+        });
+
+        // 이벤트 리스너 등록
+        addBtn.addEventListener('click', addMovie);
+        movieInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addMovie();
+        });
+
+        // 초기 렌더링 실행
+        renderMovies();
+    </script>
+</body>
+</html>
+💡 코드 설명 및 학습 포인트
+단일 파일 구조: <style> 태그 안에 CSS를, <script> 태그 안에 JavaScript를 넣어 기획서의 '단일 HTML 파일' 조건을 충족했습니다.
+HTML5 Drag and Drop API:
+영화 카드에 draggable="true" 속성을 주어 드래그가 가능하게 했습니다.
+dragstart 이벤트에서 카드의 고유 ID를 저장하고, drop 이벤트에서 그 ID를 꺼내어 어느 티어로 이동했는지 데이터를 업데이트합니다.
+localStorage 활용:
+JSON.stringify()와 JSON.parse()를 이용해 자바스크립트 배열을 문자열로 변환하여 브라우저에 저장하고 불러옵니다. 새로고침해도 데이터가 날아가지 않습니다.
+이벤트 위임과 상태 기반 렌더링:
+DOM을 직접 조작하여 이동시키는 대신, movies라는 데이터 배열의 상태(tier 값)를 변경한 뒤 renderMovies() 함수를 호출해 화면을 새로 그리는 방식을 사용했습니다. 이는 최신 프론트엔드 프레임워크(React, Vue 등)의 기본 원리와 같습니다.
+코드를 보시다가 이해가 안 가는 부분이나, 추가로 구현해 보고 싶은 기능(예: 선택 기능이었던 전체 초기화 버튼 등)이 있다면 언제든 편하게 질문해 주세요! 응원합니다! 🚀
