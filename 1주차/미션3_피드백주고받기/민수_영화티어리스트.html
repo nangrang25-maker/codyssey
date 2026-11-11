@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>민수의 영화 티어리스트</title>
+  <style>
+    :root {
+      --bg: #f3f0e8; --surface: #ffffff; --ink: #1f1e1b; --muted: #6d6a62; --line: #e2ddd2;
+      --s: #d6533a; --a: #e39a2d; --b: #4f9a6b; --c: #4f74a8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink); overflow-x: hidden;
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+      line-height: 1.5; -webkit-font-smoothing: antialiased;
+    }
+    .page { width: 960px; margin: 0 auto; padding: 48px 32px 64px; }
+
+    header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+    .eyebrow { margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .18em; color: var(--muted); }
+    h1 { margin: 0; font-size: 40px; line-height: 1.15; letter-spacing: -.03em; }
+    .lead { margin: 10px 0 0; color: var(--muted); }
+    .stat { flex-shrink: 0; padding: 10px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font-size: 14px; color: var(--muted); }
+    .stat strong { color: var(--ink); }
+
+    .toolbar { display: flex; gap: 10px; margin-top: 32px; padding: 10px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .toolbar input { flex: 1; min-width: 0; padding: 12px 14px; border: 0; border-radius: 10px; background: var(--bg); font: inherit; color: inherit; }
+    .toolbar input:focus { outline: 2px solid var(--ink); }
+    .btn { padding: 12px 20px; border: 0; border-radius: 10px; font: inherit; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .btn-primary { background: var(--ink); color: #fff; }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+    .btn:hover { filter: brightness(1.08); }
+    #status { min-height: 22px; margin: 12px 4px 20px; font-size: 14px; color: var(--muted); }
+
+    .board { display: grid; gap: 12px; }
+    .tier { display: flex; min-height: 156px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); overflow: hidden; }
+    .tier-badge { width: 96px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border: 0; color: #fff; font: inherit; cursor: pointer; }
+    .tier-badge b { font-size: 40px; line-height: 1; }
+    .tier-badge span { font-size: 12px; font-weight: 600; opacity: .85; }
+    .tier-S .tier-badge { background: var(--s); } .tier-A .tier-badge { background: var(--a); }
+    .tier-B .tier-badge { background: var(--b); } .tier-C .tier-badge { background: var(--c); }
+    .zone { flex: 1; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 12px; padding: 14px; transition: background .15s; }
+    .zone.is-over { background: #f7f4ec; }
+    .zone:empty { align-content: center; justify-content: center; }
+    .zone:empty::before { content: "여기로 끌어 놓기"; font-size: 13px; color: #b3ad9f; }
+
+    .pool { margin-top: 32px; }
+    .pool-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+    .pool-head h2 { margin: 0; font-size: 18px; }
+    .pool-head button { border: 0; background: none; font: inherit; font-size: 13px; color: var(--muted); cursor: pointer; text-decoration: underline; }
+    #pool { min-height: 156px; border: 1.5px dashed #d3cdbf; border-radius: 18px; background: transparent; }
+    #pool:empty::before { content: "모든 영화를 나눴어요"; }
+
+    .card {
+      position: relative; width: 96px; height: 128px; padding: 10px; border: 0; border-radius: 12px;
+      display: flex; align-items: flex-end; text-align: left;
+      background: linear-gradient(160deg, #e6e6e3, #cfcfcb); color: var(--ink);
+      font: inherit; font-size: 13px; font-weight: 700; line-height: 1.3; word-break: keep-all; overflow-wrap: anywhere;
+      cursor: grab; box-shadow: 0 1px 2px rgba(0,0,0,.08); transition: transform .15s, box-shadow .15s;
+    }
+    .card::before { content: ""; position: absolute; top: 10px; left: 10px; width: 18px; height: 3px; border-radius: 2px; background: rgba(31,30,27,.35); }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,.12); }
+    .card[aria-pressed="true"] { outline: 3px solid var(--ink); outline-offset: 3px; transform: translateY(-3px); }
+    .card.is-dragging { opacity: .4; }
+    :focus-visible { outline: 3px solid var(--s); outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <p class="eyebrow">MOVIE TIER LIST</p>
+        <h1>민수의 영화 티어리스트</h1>
+        <p class="lead">본 영화를 S·A·B·C 네 칸으로 나눠 보세요.</p>
+      </div>
+      <p class="stat" id="stat"></p>
+    </header>
+
+    <form class="toolbar" id="add-form">
+      <input id="title" placeholder="추가할 영화 제목" aria-label="추가할 영화 제목" maxlength="60">
+      <button class="btn btn-primary" type="submit">추가</button>
+      <button class="btn btn-ghost" type="button" id="reset">처음으로</button>
+    </form>
+    <p id="status" role="status">영화 카드를 선택한 뒤 등급을 누르세요. 끌어 놓아도 됩니다.</p>
+
+    <section class="board" id="board" aria-label="등급"></section>
+
+    <section class="pool" aria-label="아직 안 정한 영화">
+      <div class="pool-head">
+        <h2>아직 안 정한 영화</h2>
+        <button type="button" id="to-pool">선택한 영화 되돌리기</button>
+      </div>
+      <div class="zone" id="pool"></div>
+    </section>
+  </div>
+
+  <script>
+    const MOVIES = ["기생충", "인터스텔라", "라라랜드", "센과 치히로의 행방불명", "어벤져스: 엔드게임", "범죄도시", "타이타닉", "토이 스토리"];
+    const TIERS = [
+      { key: "S", caption: "최고" },
+      { key: "A", caption: "좋음" },
+      { key: "B", caption: "보통" },
+      { key: "C", caption: "아쉬움" }
+    ];
+
+    const fresh = () => ({ nextId: MOVIES.length + 1, items: MOVIES.map((title, i) => ({ id: "m" + (i + 1), title, tier: "pool" })) });
+    let state = fresh();
+    let selected = null;
+
+    const $ = selector => document.querySelector(selector);
+    const say = text => { $("#status").textContent = text; };
+    const eul = word => {
+      const code = word.charCodeAt(word.length - 1) - 0xAC00;
+      if (code < 0 || code > 11171) return "을(를)";
+      return code % 28 ? "을" : "를";
+    };
+
+    function moveTo(id, tier) {
+      const item = state.items.find(item => item.id === id);
+      if (!item) return;
+      item.tier = tier;
+      selected = null;
+      render();
+      say(tier === "pool" ? `‘${item.title}’${eul(item.title)} 되돌렸어요.` : `‘${item.title}’${eul(item.title)} ${tier}에 놓았어요.`);
+    }
+
+    function makeCard(item) {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "card";
+      card.draggable = true;
+      card.textContent = item.title;
+      card.setAttribute("aria-pressed", String(selected === item.id));
+      card.addEventListener("click", () => {
+        selected = selected === item.id ? null : item.id;
+        render();
+        say(selected ? `‘${item.title}’${eul(item.title)} 골랐어요. 놓을 등급을 누르세요.` : "선택을 풀었어요.");
+      });
+      card.addEventListener("dragstart", event => {
+        event.dataTransfer.setData("text/plain", item.id);
+        card.classList.add("is-dragging");
+      });
+      card.addEventListener("dragend", () => card.classList.remove("is-dragging"));
+      return card;
+    }
+
+    function makeDropZone(zone, tier) {
+      zone.addEventListener("dragover", event => { event.preventDefault(); zone.classList.add("is-over"); });
+      zone.addEventListener("dragleave", () => zone.classList.remove("is-over"));
+      zone.addEventListener("drop", event => {
+        event.preventDefault();
+        zone.classList.remove("is-over");
+        moveTo(event.dataTransfer.getData("text/plain"), tier);
+      });
+    }
+
+    function render() {
+      const board = $("#board");
+      board.replaceChildren();
+      for (const tier of TIERS) {
+        const row = document.createElement("div");
+        row.className = "tier tier-" + tier.key;
+
+        const badge = document.createElement("button");
+        badge.type = "button";
+        badge.className = "tier-badge";
+        badge.innerHTML = `<b>${tier.key}</b><span>${tier.caption}</span>`;
+        badge.setAttribute("aria-label", tier.key + " 등급에 놓기");
+        badge.addEventListener("click", () => selected ? moveTo(selected, tier.key) : say("먼저 영화 카드를 골라 주세요."));
+
+        const zone = document.createElement("div");
+        zone.className = "zone";
+        state.items.filter(item => item.tier === tier.key).forEach(item => zone.append(makeCard(item)));
+        makeDropZone(zone, tier.key);
+
+        row.append(badge, zone);
+        board.append(row);
+      }
+
+      const pool = $("#pool");
+      pool.replaceChildren(...state.items.filter(item => item.tier === "pool").map(makeCard));
+
+      const ranked = state.items.filter(item => item.tier !== "pool").length;
+      $("#stat").innerHTML = `<strong>${state.items.length}편</strong> 중 <strong>${ranked}편</strong> 나눔`;
+    }
+
+    makeDropZone($("#pool"), "pool");
+    $("#to-pool").addEventListener("click", () => selected ? moveTo(selected, "pool") : say("먼저 영화 카드를 골라 주세요."));
+
+    $("#add-form").addEventListener("submit", event => {
+      event.preventDefault();
+      const input = $("#title");
+      const title = input.value.trim();
+      state.items.push({ id: "m" + state.nextId++, title, tier: "pool" });
+      input.value = "";
+      render();
+      say(`‘${title}’${eul(title)} 추가했어요.`);
+    });
+
+    $("#reset").addEventListener("click", () => {
+      state = fresh();
+      selected = null;
+      render();
+      say("처음 목록으로 돌아왔어요.");
+    });
+
+    render();
+  </script>
+</body>
+</html>
