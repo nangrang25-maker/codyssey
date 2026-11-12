@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>코디세이 입학연수 일정 달력</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Arial, sans-serif;
+      background: #f6f7fb;
+      color: #222;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    .month-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .notice {
+      margin: 16px 0 20px;
+      padding: 12px 16px;
+      background: #ffffff;
+      border-left: 5px solid #5b8def;
+      border-radius: 8px;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      border: 1px solid #d7dbe7;
+      background: #d7dbe7;
+      gap: 1px;
+    }
+
+    .weekday {
+      padding: 12px 6px;
+      background: #2f3a56;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .day {
+      min-height: 155px;
+      padding: 8px;
+      background: #ffffff;
+    }
+
+    .day.other-month {
+      background: #f0f1f5;
+      color: #aaa;
+    }
+
+    .date-number {
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .sunday .date-number {
+      color: #d64b4b;
+    }
+
+    .saturday .date-number {
+      color: #3b6fd8;
+    }
+
+    .events {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .event {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: #222;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      cursor: default;
+    }
+
+    .event-time {
+      display: block;
+      margin-bottom: 3px;
+      font-weight: bold;
+      font-size: 11px;
+    }
+
+    .event-title {
+      display: block;
+    }
+
+    .event.registration {
+      background: #ffd6e7;
+      border-color: #f3a8c8;
+    }
+
+    .event.session {
+      background: #d9f0ff;
+      border-color: #9ed2f0;
+    }
+
+    .event.lecture {
+      background: #f3e5c7;
+      border-color: #d8bd86;
+    }
+
+    .event.exam {
+      background: #ffb8b8;
+      border: 2px solid #d93030;
+      font-weight: bold;
+      box-shadow: 0 0 0 2px rgba(217, 48, 48, 0.12);
+    }
+
+    .footer {
+      margin-top: 20px;
+      padding: 14px 16px;
+      background: #ffffff;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    @media (max-width: 800px) {
+      body {
+        padding: 12px;
+      }
+
+      .calendar {
+        grid-template-columns: 1fr;
+      }
+
+      .weekday {
+        display: none;
+      }
+
+      .day {
+        min-height: auto;
+      }
+
+      .day.other-month {
+        display: none;
+      }
+
+      .date-number::before {
+        content: "11월 ";
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <header>
+      <h1>코디세이 입학연수 일정 달력</h1>
+      <p class="month-title">2026년 11월</p>
+    </header>
+
+    <section class="notice">
+      코디세이 AI 네이티브 입학연수 일정을 한 화면에서 확인하기 위한 달력입니다.
+      링크 연결 기능은 삭제했으며, 일정은 확인용으로만 표시합니다.
+      11월 12일 개인 일정은 포함하지 않았습니다.
+    </section>
+
+    <section class="legend" aria-label="일정 구분 색상 안내">
+      <div class="legend-item">
+        <span class="legend-color" style="background:#ffd6e7;"></span>
+        시험접수
+      </div>
+      <div class="legend-item">
+        <span class="legend-color" style="background:#d9f0ff;"></span>
+        교류 세션
+      </div>
+      <div class="legend-item">
+        <span class="legend-color" style="background:#f3e5c7;"></span>
+        특강
+      </div>
+      <div class="legend-item">
+        <span class="legend-color" style="background:#ffb8b8;"></span>
+        시험
+      </div>
+    </section>
+
+    <main class="calendar" aria-label="2026년 11월 코디세이 입학연수 일정 달력">
+      <div class="weekday">월</div>
+      <div class="weekday">화</div>
+      <div class="weekday">수</div>
+      <div class="weekday">목</div>
+      <div class="weekday">금</div>
+      <div class="weekday">토</div>
+      <div class="weekday">일</div>
+
+      <!-- 1주차 -->
+      <div class="day other-month">
+        <div class="date-number">26</div>
+      </div>
+      <div class="day other-month">
+        <div class="date-number">27</div>
+      </div>
+      <div class="day other-month">
+        <div class="date-number">28</div>
+      </div>
+      <div class="day other-month">
+        <div class="date-number">29</div>
+      </div>
+      <div class="day other-month">
+        <div class="date-number">30</div>
+      </div>
+      <div class="day other-month saturday">
+        <div class="date-number">31</div>
+      </div>
+      <div class="day sunday">
+        <div class="date-number">1</div>
+        <div class="events">
+          <div class="event registration">
+            <span class="event-time">11.01 00:00 ~ 11.02 00:00</span>
+            <span class="event-title">시험접수 (코디세이 AI 네이티브 입학연수)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2주차 -->
+      <div class="day">
+        <div class="date-number">2</div>
+      </div>
+      <div class="day">
+        <div class="date-number">3</div>
+        <div class="events">
+          <div class="event session">
+            <span class="event-time">15:00 ~ 17:00</span>
+            <span class="event-title">[교류 세션 안내] 입학연수과정 첫 주 살아남기! (이론부터 실습까지)</span>
+          </div>
+        </div>
+      </div>
+      <div class="day">
+        <div class="date-number">4</div>
+      </div>
+      <div class="day">
+        <div class="date-number">5</div>
+      </div>
+      <div class="day">
+        <div class="date-number">6</div>
+      </div>
+      <div class="day saturday">
+        <div class="date-number">7</div>
+      </div>
+      <div class="day sunday">
+        <div class="date-number">8</div>
+      </div>
+
+      <!-- 3주차 -->
+      <div class="day">
+        <div class="date-number">9</div>
+        <div class="events">
+          <div class="event lecture">
+            <span class="event-time">14:00 ~ 15:00</span>
+            <span class="event-title">11월 2주차 전문가 특강</span>
+          </div>
+        </div>
+      </div>
+      <div class="day">
+        <div class="date-number">10</div>
+        <div class="events">
+          <div class="event lecture">
+            <span class="event-time">14:00 ~ 15:00</span>
+            <span class="event-title">11월 2주차 전문가 특강</span>
+          </div>
+          <div class="event lecture">
+            <span class="event-time">16:30 ~ 17:30</span>
+            <span class="event-title">11월 2주차 전문가 특강</span>
+          </div>
+        </div>
+      </div>
+      <div class="day">
+        <div class="date-number">11</div>
+      </div>
+      <div class="day">
+        <div class="date-number">12</div>
+      </div>
+      <div class="day">
+        <div class="date-number">13</div>
+        <div class="events">
+          <div class="event exam">
+            <span class="event-time">10:30 ~ 12:00</span>
+            <span class="event-title">시험 (코디세이 AI 네이티브 입학연수)</span>
+          </div>
+        </div>
+      </div>
+      <div class="day saturday">
+        <div class="date-number">14</div>
+      </div>
+      <div class="day sunday">
+        <div class="date-number">15</div>
+      </div>
+
+      <!-- 4주차 -->
+      <div class="day">
+        <div class="date-number">16</div>
+      </div>
+      <div class="day">
+        <div class="date-number">17</div>
+      </div>
+      <div class="day">
+        <div class="date-number">18</div>
+      </div>
+      <div class="day">
+        <div class="date-number">19</div>
+      </div>
+      <div class="day">
+        <div class="date-number">20</div>
+      </div>
+      <div class="day saturday">
+        <div class="date-number">21</div>
+      </div>
+      <div class="day sunday">
+        <div class="date-number">22</div>
+      </div>
+
+      <!-- 5주차 -->
+      <div class="day">
+        <div class="date-number">23</div>
+      </div>
+      <div class="day">
+        <div class="date-number">24</div>
+      </div>
+      <div class="day">
+        <div class="date-number">25</div>
+      </div>
+      <div class="day">
+        <div class="date-number">26</div>
+      </div>
+      <div class="day">
+        <div class="date-number">27</div>
+      </div>
+      <div class="day saturday">
+        <div class="date-number">28</div>
+      </div>
+      <div class="day sunday">
+        <div class="date-number">29</div>
+      </div>
+
+      <!-- 6주차 -->
+      <div class="day">
+        <div class="date-number">30</div>
+      </div>
+      <div class="day other-month">
+        <div class="date-number">1</div>
+      </div>
+      <div class="day other-month">
+        <div class="date-number">2</div>
+      </div>
+      <div class="day other-month">
+        <div class="date-number">3</div>
+      </div>
+      <div class="day other-month">
+        <div class="date-number">4</div>
+      </div>
+      <div class="day other-month saturday">
+        <div class="date-number">5</div>
+      </div>
+      <div class="day other-month sunday">
+        <div class="date-number">6</div>
+      </div>
+    </main>
+
+    <section class="footer">
+      <strong>검증 기준</strong><br />
+      일정 6개가 2026년 11월의 올바른 날짜 칸에 표시됩니다.
+      11월 10일 특강은 14:00 일정이 먼저, 16:30 일정이 나중에 표시됩니다.
+      11월 3일 일정 제목은 전체 문장이 보이도록 줄바꿈됩니다.
+      11월 13일 시험은 빨강 계열 색상과 굵은 테두리로 강조됩니다.
+      11월 12일에는 개인 일정이 표시되지 않습니다.
+      링크 연결 기능은 삭제되어 일정을 눌러도 새 창이 열리지 않습니다.
+      <br /><br />
+      <strong>사용한 AI 서비스와 모델 이름</strong><br />
+      ChatGPT
+    </section>
+  </div>
+</body>
+</html>
