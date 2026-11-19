@@ -21,9 +21,9 @@
 
 | 모델 | 회사 | 무료 요금제 | 고른 이유 (직접 작성) | 실행 시점 |
 |---|---|---|---|---|
-| Gemini 4 Hydrogen (Gemini 앱 "일상생활 지원", 사고 수준 낮음) | Google | 유료 요금제(AI 플러스)로 실행 | (다소 님이 다시 작성) | 2026-11-20 00:17 KST · [결과](runs/01_Gemini4Hydrogen.md) |
+| Gemini 4 Hydrogen (Gemini 앱 "일상생활 지원", 사고 수준 낮음) | Google | 유료 요금제(AI 플러스)로 실행 | 원래 쓰려던 모델(Gemini 3 Flash → 3.1 Flash Lite)이 무료 요금제·앱 화면 문제로 안 돼서 대신 선택 | 2026-11-20 00:17 KST · [결과](runs/01_Gemini4Hydrogen.md) |
 | Upstage Solar Pro 4 (Solar Chat, 자동) | Upstage | **무료** (로그인 없이 사용) | 한글 특화 모델이며 사용해 본 적 없는 모델이라 선택 | 2026-11-20 00:39 KST · [결과](runs/02_SolarPro4.md) |
-| GPT-6 (ChatGPT Free) | OpenAI | **무료** (ChatGPT 공식 요금제 페이지: Free = GPT-6) | (다소 님이 다시 작성) | 2026-11-20 00:44 KST · [결과](runs/03_GPT6.md) |
+| GPT-6 (ChatGPT Free) | OpenAI | **무료** (ChatGPT 공식 요금제 페이지: Free = GPT-6) | 원래 쓰려던 모델(GPT-5 mini)을 이름이 보이는 무료 환경에서 고를 수 없어서 대신 선택 | 2026-11-20 00:44 KST · [결과](runs/03_GPT6.md) |
 
 ## 3. 비교 기준
 
