@@ -1,6 +1,6 @@
-# 참고 실행: Gemini 앱 (4 Hydrogen)
+# 비교 실행 1: Gemini 4 Hydrogen
 
-> 비교표에는 넣지 않는 참고 결과. 고른 모델(Gemini 3.1 Flash Lite)이 아니라 Gemini 앱의 "일상생활 지원 · 4 Hydrogen", 사고 수준 "낮음"으로 실행됨(계정: AI 플러스).
+> 모델: Gemini 앱의 "일상생활 지원 · 4 Hydrogen", 사고 수준 "낮음" (계정: Google AI 플러스 유료 요금제). 처음에는 참고 실행으로 했으나, 2026-11-20 00:33 비교 대상 모델을 Gemini 4 Hydrogen으로 바꾸면서 이 실행을 비교 결과로 쓰기로 함.
 
 - 실행 시각: 2026-11-20 00:17 KST (캡처 전달 시각 기준)
 - 실행 환경: gemini.google.com 웹, 새 채팅
