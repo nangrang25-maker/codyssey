@@ -4,10 +4,12 @@
 
 과업: 카드 사용내역에서 PG 경유 결제를 골라내 회계 담당자가 실제 가맹점을 조회할 수 있게 표로 정리하기
 
+출력 칸: `결제일 | 가맹점명 | 승인액 | 승인번호 | PG 여부 | 실제 가맹점 사업자번호 | 공급가액(추정) | 부가세액(추정) | 상태 | 이유`
+
 ## 문서 순서
 
 1. [docs/model-comparison.md](docs/model-comparison.md): LLM 모델 3종(Gemini 4 Hydrogen, Upstage Solar Pro 4, GPT-6) 비교와 선정 결과. GPT-6을 골랐다(19/20점).
-2. [docs/system-design.md](docs/system-design.md): 과업 정의, 페르소나 "P/G killer", 시스템 프롬프트 v1·v2, Few-shot 3개, 입력 템플릿, 검증 전략, Zero-shot과 Few-shot 비교
+2. [docs/system-design.md](docs/system-design.md): 과업 정의, 페르소나 "P/G killer", 시스템 프롬프트 v1·v2, Few-shot 3개, 입력 템플릿, 검증 전략, Zero-shot과 Few-shot 비교, 무료 모델 품질 유지·문맥 끊김 대응·작업 단위 나누기 기준
 3. [docs/run-log.md](docs/run-log.md): 작업 기록, 10턴 대화 원문 링크, 환각 검증 결과(Pass/Fail)
 4. [docs/unresolved.md](docs/unresolved.md): 프롬프트로 끝내 풀지 못한 과업 2건
 
