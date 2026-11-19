@@ -23,7 +23,7 @@
 |---|---|---|---|---|
 | Gemini 4 Hydrogen (Gemini 앱 "일상생활 지원", 사고 수준 낮음) | Google | 유료 요금제(AI 플러스)로 실행 | (다소 님이 다시 작성) | 2026-11-20 00:17 KST · [결과](runs/01_Gemini4Hydrogen.md) |
 | Upstage Solar Pro 4 (Solar Chat, 자동) | Upstage | **무료** (로그인 없이 사용) | 한글 특화 모델이며 사용해 본 적 없는 모델이라 선택 | 2026-11-20 00:39 KST · [결과](runs/02_SolarPro4.md) |
-| GPT-6 (ChatGPT Free) | OpenAI | **무료** (ChatGPT 공식 요금제 페이지: Free = GPT-6) | (다소 님이 다시 작성) | (실행 후 기록) |
+| GPT-6 (ChatGPT Free) | OpenAI | **무료** (ChatGPT 공식 요금제 페이지: Free = GPT-6) | (다소 님이 다시 작성) | 2026-11-20 00:44 KST · [결과](runs/03_GPT6.md) |
 
 ## 3. 비교 기준
 
