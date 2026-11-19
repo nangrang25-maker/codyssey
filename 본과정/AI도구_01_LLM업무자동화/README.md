@@ -6,12 +6,18 @@
 
 ## 문서 순서
 
-1. [docs/model-comparison.md](docs/model-comparison.md) — LLM 모델 3종 비교와 선정 보고서 (작성 예정)
-2. [docs/system-design.md](docs/system-design.md) — 과업 정의, 페르소나, 시스템 프롬프트, Few-shot, 검증 전략, 개선 이력
-3. [docs/run-log.md](docs/run-log.md) — 10턴 이상 대화 원문과 작업 기록 (작성 예정)
-4. [docs/unresolved.md](docs/unresolved.md) — 프롬프트로 끝내 풀지 못한 과업 (작성 예정)
+1. [docs/model-comparison.md](docs/model-comparison.md): LLM 모델 3종(Gemini 4 Hydrogen, Upstage Solar Pro 4, GPT-6) 비교와 선정 결과. GPT-6을 골랐다(19/20점).
+2. [docs/system-design.md](docs/system-design.md): 과업 정의, 페르소나 "P/G killer", 시스템 프롬프트 v1·v2, Few-shot 3개, 입력 템플릿, 검증 전략, Zero-shot과 Few-shot 비교
+3. [docs/run-log.md](docs/run-log.md): 작업 기록, 10턴 대화 원문 링크, 환각 검증 결과(Pass/Fail)
+4. [docs/unresolved.md](docs/unresolved.md): 프롬프트로 끝내 풀지 못한 과업 2건
+
+## 결과 한눈에
+
+- 환각 질문 5개: Pass 4 (A 1, B 3), Fail 1. 실패한 7턴(입력과 다른 사용자 주장을 그대로 따름)은 v2 규칙으로 고쳤다.
+- Few-shot은 PG 판별을 24/24로 올렸지만 공급가액 칸에서 새 오류가 생겼다.
 
 ## 그 밖의 폴더
 
-- `data/` — 가짜 샘플 카드내역 (실제 회사 데이터·개인정보 없음)
-- `캡처/` — 실행 화면 캡처
+- `docs/runs/`: 모델 실행 결과 원문(편집 없음)과 10턴 대화 원문
+- `data/`: 가짜 샘플 카드내역과 정답지 (실제 회사 데이터·개인정보 없음)
+- `캡처/`: 실행 화면 캡처
