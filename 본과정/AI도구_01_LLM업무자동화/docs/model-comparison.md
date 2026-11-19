@@ -13,7 +13,7 @@
 
 변경 이력: Gemini 3 Flash → Gemini 3.1 Flash Lite (무료 요금제 근거) → Gemini 4 Hydrogen (Gemini 앱에서 실제로 고를 수 있는 모델로 실행한 결과를 쓰기로 함), GPT-5 mini → GPT-6 (ChatGPT 무료 요금제에서 모델 이름을 확인할 수 있어서)
 
-무료 요금제 모델: **GPT-6** (ChatGPT 공식 요금제 페이지 "Free ₩0/월 · GPT-6와 무제한 텍스트 대화" 캡처 근거)
+무료 요금제 모델: **GPT-6** (ChatGPT 공식 요금제 페이지 "Free ₩0/월 · GPT-6와 무제한 텍스트 대화" 캡처 근거, 로그인하지 않은 상태로 실행), **Upstage Solar Pro 4** (Solar Chat을 로그인 없이 사용)
 
 실행 시점은 사용자가 실행 캡처를 전달한 시각(KST) 기준이다.
 
@@ -22,7 +22,7 @@
 | 모델 | 회사 | 무료 요금제 | 고른 이유 (직접 작성) | 실행 시점 |
 |---|---|---|---|---|
 | Gemini 4 Hydrogen (Gemini 앱 "일상생활 지원", 사고 수준 낮음) | Google | 유료 요금제(AI 플러스)로 실행 | (다소 님이 다시 작성) | 2026-11-20 00:17 KST · [결과](runs/01_Gemini4Hydrogen.md) |
-| Upstage Solar Pro 4 (Solar Chat, 자동) | Upstage | 로그인 없이 사용 (요금제 확인 필요) | 한글 특화 모델이며 사용해 본 적 없는 모델이라 선택 | 2026-11-20 00:39 KST · [결과](runs/02_SolarPro4.md) |
+| Upstage Solar Pro 4 (Solar Chat, 자동) | Upstage | **무료** (로그인 없이 사용) | 한글 특화 모델이며 사용해 본 적 없는 모델이라 선택 | 2026-11-20 00:39 KST · [결과](runs/02_SolarPro4.md) |
 | GPT-6 (ChatGPT Free) | OpenAI | **무료** (ChatGPT 공식 요금제 페이지: Free = GPT-6) | (다소 님이 다시 작성) | (실행 후 기록) |
 
 ## 3. 비교 기준
